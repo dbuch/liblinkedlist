@@ -21,8 +21,8 @@ main(void)
         list_traverse(&list_one, print_chars);
         list_traverse(&list_two, print_chars);
 
-        list_free(&list_one);
-        list_free(&list_two);
+        list_dispose(&list_one);
+        list_dispose(&list_two);
 
-    return 0;
+        return 0;
 }

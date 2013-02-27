@@ -7,25 +7,25 @@
 #define FOREACH_NODE_REVERSE(current, list)                                 \
     for (NODE *(current) = (list)->last; current; current = current->prev)
 
-typedef struct NODELIST NODE;
-typedef struct LinkedLIST LIST;
+typedef struct NodeList NODE;
+typedef struct LinkedList LIST;
 
-struct NODELIST {
-    const void *data;
-    NODE *prev;
-    NODE *next;
+struct NodeList {
+        const void *data;
+        NODE *prev;
+        NODE *next;
 };
 
-struct LinkedLIST {
-    NODE *first;
-    NODE *last;
+struct LinkedList {
+        NODE *first;
+        NODE *last;
 };
 
 void list_init(LIST *list);
 
 void list_push(LIST *list, void *data);
 
-void list_free(LIST *list);
+void list_dispose(LIST *list);
 
 void print_chars (void *data);
 

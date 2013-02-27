@@ -5,10 +5,18 @@
 
 #include "linkedlist.h"
 
+/*
+   Init Head and tail note
+*/
+
 void
 list_init(LIST *l) {
         l->first = l->last = NULL;
 }
+
+/*
+   Push function
+*/
 
 void
 list_push(LIST *list, void *data) {
@@ -19,21 +27,24 @@ list_push(LIST *list, void *data) {
                 exit(EXIT_FAILURE);
         }
 
-        new->data = data;
+        new->data = data; /* Transfer Client data to new node */
 
         if (list->last) {
                 list->last->next = new;
                 new->prev = list->last;
                 list->last = new;
-        }
-        else {
+        } else {
                 list->first = new;
                 list->last = new;
         }
 }
 
+/*
+   list_dispose function free's the list
+*/
+
 void
-list_free(LIST *list)
+list_dispose(LIST *list)
 {
         NODE *next;
         for (NODE *curr = list->first; curr; curr = next) {
