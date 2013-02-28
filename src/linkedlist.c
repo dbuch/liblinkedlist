@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <assert.h>
 
 #include "linkedlist.h"
 
@@ -10,12 +8,12 @@
 */
 
 void
-list_init(LIST *l) {
-        l->first = l->last = NULL;
+list_init(LIST *list) {
+        list->first = list->last = NULL;
 }
 
 /*
-   Push function
+   Push client data to node function
 */
 
 void
@@ -40,8 +38,23 @@ list_push(LIST *list, void *data) {
 }
 
 /*
+   Returns the length of the list
+*/
+
+unsigned
+list_len(LIST *list)
+{
+        unsigned count = 0;
+        FOREACH_NODE(current, list)
+                count++;
+        return count;
+}
+
+
+/*
    list_dispose function free's the list
 */
+
 
 void
 list_dispose(LIST *list)
@@ -55,7 +68,7 @@ list_dispose(LIST *list)
 
 void
 print_chars (void *data) {
-        printf("%s\n", (char*) data);
+        printf("%s ", (char*) data);
 }
 
 void

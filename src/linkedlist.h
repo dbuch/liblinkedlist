@@ -25,6 +25,8 @@ void list_init(LIST *list);
 
 void list_push(LIST *list, void *data);
 
+unsigned list_len(LIST *list);
+
 void list_dispose(LIST *list);
 
 void print_chars (void *data);
