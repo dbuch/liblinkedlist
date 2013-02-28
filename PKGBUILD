@@ -26,7 +26,9 @@ install=
 changelog=
 source=($pkgname-$pkgver.tar.gz)
 noextract=()
-md5sums=('358603f4a72cd643576b757c0b0ccd88')
+
+md5sums=('4739da6dd575b082a788c22e9538a1f2')
+
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   ./autogen.sh

@@ -9,7 +9,7 @@
 
 void
 list_init(LIST *list) {
-        list->first = list->last = NULL;
+        list->head = list->tail = NULL;
 }
 
 /*
@@ -27,13 +27,13 @@ list_push(LIST *list, void *data) {
 
         new->data = data; /* Transfer Client data to new node */
 
-        if (list->last) {
-                list->last->next = new;
-                new->prev = list->last;
-                list->last = new;
+        if (list->tail) {
+                list->tail->next = new; /* Put newly allocated node to tails next */
+                new->prev = list->tail; /* Make new previous pointer point to List last */
+                list->tail = new;       /* finally point new to list last */
         } else {
-                list->first = new;
-                list->last = new;
+                list->head = new;
+                list->tail = new;
         }
 }
 
@@ -60,7 +60,7 @@ void
 list_dispose(LIST *list)
 {
         NODE *next;
-        for (NODE *curr = list->first; curr; curr = next) {
+        for (NODE *curr = list->head; curr; curr = next) {
                 next = curr->next;
                 free(curr);
         }

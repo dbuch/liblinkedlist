@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "linkedlist.h"
 
+static void print_ints(void *data) {
+        printf("%d ", (intptr_t) data);
+}
 int
 main(void)
 {
@@ -12,14 +16,14 @@ main(void)
         list_init(&list_one);
         list_init(&list_two);
 
-        for (char a = 'a'; a <= 'z'; a++) {
-                list_push(&list_one, "a");
+        for (intptr_t i = 0; i <= 30; i++) {
+                list_push(&list_one, (void*) i);
         }
 
         list_push(&list_two, "This list owns");
         list_push(&list_two, "!");
 
-        list_traverse(&list_one, print_chars);
+        list_traverse(&list_one, print_ints);
         list_traverse(&list_two, print_chars);
 
         printf("\nSize of list_one %d", list_len(&list_one));
