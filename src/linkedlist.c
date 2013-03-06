@@ -72,8 +72,8 @@ print_chars (void *data) {
 }
 
 void
-list_traverse(LIST *list, int Traverse_mode, void (*typefn)(void*)) {
-        switch (Traverse_mode) {
+list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
+        switch (mode) {
                 case FORWARD:
                         FOREACH_NODE(current, list)
                                 typefn((void*) current->data);

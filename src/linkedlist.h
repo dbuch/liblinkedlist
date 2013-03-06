@@ -21,7 +21,8 @@ struct LinkedList {
         NODE *tail;
 };
 
-enum Traverse_mode { FORWARD, REVERSE };
+typedef enum { FORWARD, REVERSE } Traverse_mode;
+
 
 void list_init(LIST *);
 
@@ -33,6 +34,6 @@ void list_dispose(LIST *);
 
 void print_chars (void *);
 
-void list_traverse(LIST *, int Traverse_mode, void (*typefn)(void*));
+void list_traverse(LIST *, Traverse_mode, void (*typefn)(void*));
 
 #endif
