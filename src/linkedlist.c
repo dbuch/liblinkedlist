@@ -67,18 +67,13 @@ list_dispose(LIST *list)
 }
 
 void
-print_chars (void *data) {
-        printf("%s ", (char*) data);
-}
-
-void
 list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
         switch (mode) {
                 case FORWARD:
                         FOREACH_NODE(current, list)
                                 typefn((void*) current->data);
                         break;
-                case REVERSE:
+                case BACKWARD:
                         FOREACH_NODE_REVERSE(current, list)
                                 typefn((void*) current->data);
                         break;
