@@ -30,7 +30,7 @@ main(void)
         list_push(&list_two, "This list owns");
         list_push(&list_two, "!");
 
-        list_traverse(&list_one, BACKWARD, print_ints);
+        list_traverse(&list_one, FORWARD, print_ints);
         list_traverse(&list_two, FORWARD, print_chars);
 
         printf("\nSize of list_one %d", list_len(&list_one));
