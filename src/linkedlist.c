@@ -72,13 +72,18 @@ print_chars (void *data) {
 }
 
 void
-list_traverse(LIST *list, void (*typefn)(void*)) {
-        FOREACH_NODE(current, list)
-                typefn((void*) current->data);
-}
-
-void
-list_traverse_reverse(LIST *list, void (*typefn)(void*)) {
-        FOREACH_NODE_REVERSE(current, list)
-                typefn((void*) current->data);
+list_traverse(LIST *list, int Traverse_mode, void (*typefn)(void*)) {
+        switch (Traverse_mode) {
+                case FORWARD:
+                        FOREACH_NODE(current, list)
+                                typefn((void*) current->data);
+                        break;
+                case REVERSE:
+                        FOREACH_NODE_REVERSE(current, list)
+                                typefn((void*) current->data);
+                        break;
+                default:
+                        fprintf(stderr, "ERROR: Invalid traverse mode!\n");
+                return;
+        }
 }
