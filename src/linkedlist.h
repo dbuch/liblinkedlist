@@ -29,6 +29,8 @@
     for ((current) = (list)->tail; current; current = current->prev)
 
 #define INT_TO_VP(i) ((void*) ((intptr_t)(i)))
+#define VP_TO_INT(i) ((int) ((intptr_t)(i)))
+
 #define UINT_TO_VP(ui) ((void*) ((uintptr_t)(ui)))
 
 typedef struct NodeList NODE;
@@ -51,8 +53,8 @@ struct LinkedList {
 
 typedef enum { FORWARD, BACKWARD } Traverse_mode;
 
-int Intcmp(const void *a, const void *b);
-int Strcmp(const void *a, const void *b);
+int IntCmp(const void *a, const void *b);
+int StrCmp(const void *a, const void *b);
 
 void list_init(LIST *, cmpfn_t cmpfn);
 
@@ -60,7 +62,7 @@ bool list_contains(LIST *, const void *data);
 
 NODE *list_node(LIST *, const void *data);
 
-void list_find_delete(LIST *, const void *data);
+int list_find_delete(LIST *, const void *data);
 
 void list_put(LIST *, void *);
 

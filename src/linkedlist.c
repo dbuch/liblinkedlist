@@ -24,16 +24,20 @@
 
 #include "linkedlist.h"
 
-int Intcmp(const void *a, const void *b) {
+/*
+   Comapre Functions
+*/
+
+int IntCmp(const void *a, const void *b) {
         return (intptr_t)a - (intptr_t)b;
 }
 
-int Strcmp(const void *a, const void *b) {
+int StrCmp(const void *a, const void *b) {
         return strcmp((char*)a, (char*)b);
 }
 
 /*
-   Init Head and tail note
+   Init List - Head tail node, Compare Function and set n_elements to 0
 */
 
 void
@@ -57,7 +61,6 @@ list_put(LIST *list, void *data) {
         }
 
         new->data = data; /* Transfer Client data to new node */
-        list->n_elements++;
 
         if (list->tail) {
                 list->tail->next = new; /* Put newly allocated node to tails next */
@@ -67,6 +70,7 @@ list_put(LIST *list, void *data) {
                 list->head = new;
                 list->tail = new;
         }
+        list->n_elements++;
 }
 
 /*
@@ -108,11 +112,11 @@ NODE *list_node(LIST *list, const void *data) {
         return NULL;
 }
 
-void list_find_delete(LIST *list, const void *data) {
+int list_find_delete(LIST *list, const void *data) {
         NODE *target = list_node(list, data);
 
         if (target == NULL)
-                return;
+                return -1;
 
         NODE *prev, *next;
 
@@ -140,6 +144,7 @@ void list_find_delete(LIST *list, const void *data) {
 
         free(target);
         list->n_elements--;
+        return 1;
 }
 
 bool
