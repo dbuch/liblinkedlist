@@ -1,15 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
+#include <string.h>
 
 #include "linkedlist.h"
+
+int Intcmp(const void *a, const void *b) {
+        return (intptr_t)a - (intptr_t)b;
+}
+
+int Strcmp(const void *a, const void *b) {
+        return strcmp((char*)a, (char*)b);
+}
 
 /*
    Init Head and tail note
 */
 
 void
-list_init(LIST *list) {
+list_init(LIST *list, cmpfn_t cmpfn) {
         list->head = list->tail = NULL;
+        list->cmpfn = cmpfn;
+        list->n_elements = 0;
 }
 
 /*
@@ -17,7 +29,7 @@ list_init(LIST *list) {
 */
 
 void
-list_push(LIST *list, void *data) {
+list_put(LIST *list, void *data) {
         NODE *new = (NODE *)calloc(1, sizeof(NODE));
 
         if (!new) {
@@ -26,6 +38,7 @@ list_push(LIST *list, void *data) {
         }
 
         new->data = data; /* Transfer Client data to new node */
+        list->n_elements++;
 
         if (list->tail) {
                 list->tail->next = new; /* Put newly allocated node to tails next */
@@ -42,14 +55,12 @@ list_push(LIST *list, void *data) {
 */
 
 unsigned
-list_len(LIST *list)
-{
-        unsigned count = 0;
-        FOREACH_NODE(current, list)
-                count++;
-        return count;
-}
+list_len(LIST *list) {
+        if (!list)
+                return 0;
 
+        return list->n_elements;
+}
 
 /*
    list_dispose function free's the list
@@ -57,17 +68,75 @@ list_len(LIST *list)
 
 
 void
-list_dispose(LIST *list)
-{
-        NODE *next;
-        for (NODE *curr = list->head; curr; curr = next) {
-                next = curr->next;
-                free(curr);
+list_dispose(LIST *list) {
+        if(!list)
+                return;
+
+        NODE *current, *next;
+        for (current = list->head; current; current = next) {
+                next = current->next;
+                free(current);
         }
+}
+
+NODE *list_node(LIST *list, const void *data) {
+        NODE *current;
+        FOREACH_NODE(current, list) {
+                if ((list->cmpfn(data,current->data)) == 0) {
+                        return current;
+                }
+        }
+        return NULL;
+}
+
+void list_find_delete(LIST *list, const void *data) {
+        NODE *target = list_node(list, data);
+
+        if (target == NULL)
+                return;
+
+        NODE *prev, *next;
+
+        prev = target->prev;
+        next = target->next;
+
+
+        if (prev) {
+                if (next) {
+                        prev->next = next;
+                        next->prev = prev;
+                }
+                else {
+                        prev->next = NULL;
+                        list->tail = prev;
+                }
+        }
+        else {
+                if (next) {
+                        next->prev = NULL;
+                        list->head = next;
+                } else
+                        list->head = list->tail = NULL;
+        }
+
+        free(target);
+        list->n_elements--;
+}
+
+bool
+list_contains(LIST *list, const void *data) {
+        NODE *current;
+        FOREACH_NODE(current, list) {
+                if ((list->cmpfn(data,current->data)) == 0) {
+                        return true;
+                }
+        }
+        return false;
 }
 
 void
 list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
+        NODE *current;
         switch (mode) {
                 case FORWARD:
                         FOREACH_NODE(current, list)
@@ -77,8 +146,5 @@ list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
                         FOREACH_NODE_REVERSE(current, list)
                                 typefn((void*) current->data);
                         break;
-                default:
-                        fprintf(stderr, "ERROR: Invalid traverse mode!\n");
-                return;
         }
 }

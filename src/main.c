@@ -17,27 +17,36 @@ print_ints(void *data) {
 int
 main(void)
 {
-        LIST list_one;
-        LIST list_two;
+        LIST ints;
+        LIST chars;
 
-        list_init(&list_one);
-        list_init(&list_two);
+        list_init(&ints, Intcmp);
+        list_init(&chars, Strcmp);
 
         for (intptr_t i = 0; i <= 10; i++) {
-                list_push(&list_one, (void*) i);
+                list_put(&ints, INT_TO_VP(i));
         }
 
-        list_push(&list_two, "This list owns");
-        list_push(&list_two, "!");
+        list_traverse(&ints, FORWARD, print_ints);
+        printf("\nLenght of \"ints\" %d\n", list_len(&ints));
+        list_find_delete(&ints, INT_TO_VP(5));
+        list_find_delete(&ints, INT_TO_VP(6));
+        printf("\n");
+        list_traverse(&ints, FORWARD, print_ints);
 
-        list_traverse(&list_one, FORWARD, print_ints);
-        list_traverse(&list_two, FORWARD, print_chars);
+        list_put(&chars, "This");
+        list_put(&chars, "list");
+        list_put(&chars, "owns!");
 
-        printf("\nSize of list_one %d", list_len(&list_one));
-        printf("\nSize of list_two %d\n", list_len(&list_two));
+        list_find_delete(&chars, "This");
 
-        list_dispose(&list_one);
-        list_dispose(&list_two);
+        list_traverse(&chars, FORWARD, print_chars);
+
+        printf("\nLenght of \"ints\" %d\n", list_len(&ints));
+        printf("Lenght of \"chars\"  %d\n", list_len(&chars));
+
+        list_dispose(&ints);
+        list_dispose(&chars);
 
         return 0;
 }
