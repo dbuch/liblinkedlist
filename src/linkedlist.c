@@ -25,7 +25,7 @@
 #include "linkedlist.h"
 
 /**
- *   Compare functions
+ **   Compare functions
  **/
 
 int IntCmp(const void *a, const void *b) {
@@ -33,26 +33,27 @@ int IntCmp(const void *a, const void *b) {
 }
 
 int StrCmp(const void *a, const void *b) {
-        return strcmp((char*)a, (char*)b);
+        return strcmp(VP_TO_CHAR(a), VP_TO_CHAR(b));
 }
 
 /**
- *   Init List - Head tail node, Compare Function and set n_elements to 0
+ **   Init List - Head tail node, Compare Function and set n_elements to 0
  **/
 
-void
-list_init(LIST *list, cmpfn_t cmpfn) {
-        list->head = list->tail = NULL;
-        list->cmpfn = cmpfn;
-        list->n_elements = 0;
+LIST *list_init(cmpfn_t cmpfn) {
+        LIST *newlist = (LIST*) malloc(sizeof(LIST));
+
+        newlist->head = newlist->tail = NULL;
+        newlist->cmpfn = cmpfn;
+        newlist->n_elements = 0;
+        return newlist;
 }
 
-/*
-   Put client data to new node
-*/
+/**
+ **   Puts new node + client data to list
+ **/
 
-void
-list_put(LIST *list, void *data) {
+void list_push_node(LIST *list, void *data) {
         if (!list)
                 return;
 
@@ -69,32 +70,29 @@ list_put(LIST *list, void *data) {
                 list->tail->next = new; /* Put newly allocated node to tails next */
                 new->prev = list->tail; /* Make new previous pointer point to List last */
                 list->tail = new;       /* finally point new to list last */
-        } else {
+        } else {                        /** In case list is empty, head and tail is now points to new node **/
                 list->head = new;
                 list->tail = new;
         }
         list->n_elements++;
 }
 
-/*
-   Returns the length of the list
-*/
+/**
+ **   Returns length of list
+ **/
 
-unsigned
-list_len(LIST *list) {
+unsigned list_len(LIST *list) {
         if (!list)
                 return 0;
 
         return list->n_elements;
 }
 
-/*
-   list_dispose function free's the list
-*/
+/**
+ **   list_dispose free's the list nodes
+ **/
 
-
-void
-list_dispose(LIST *list) {
+void list_dispose(LIST *list) {
         if(!list)
                 return;
 
@@ -103,7 +101,12 @@ list_dispose(LIST *list) {
                 next = current->next;
                 free(current);
         }
+        free(list);
 }
+
+/**
+ **   Traverse list and returns node equal to client data
+ **/
 
 NODE *list_find_node(LIST *list, const void *data) {
         NODE *current;
@@ -115,7 +118,11 @@ NODE *list_find_node(LIST *list, const void *data) {
         return NULL;
 }
 
-int list_node_delete(LIST *list, const void *data) {
+/**
+ **   list_node_delete uses list_find_node to delete node
+ **/
+
+int list_delete_node(LIST *list, const void *data) {
         NODE *target = list_find_node(list, data);
 
         if (target == NULL)
@@ -150,8 +157,11 @@ int list_node_delete(LIST *list, const void *data) {
         return 1;
 }
 
-bool
-list_contains(LIST *list, const void *data) {
+/**
+ **   Traverse list and returns true if client data is found
+ **/
+
+bool list_contains(LIST *list, const void *data) {
         NODE *current;
         FOREACH_NODE(current, list) {
                 if ((list->cmpfn(data,current->data)) == 0) {
@@ -161,8 +171,11 @@ list_contains(LIST *list, const void *data) {
         return false;
 }
 
-void
-list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
+/**
+ **   Traverse list forward or backward
+ **/
+
+void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
         NODE *current;
         switch (mode) {
                 case FORWARD:

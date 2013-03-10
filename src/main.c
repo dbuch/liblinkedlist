@@ -22,69 +22,60 @@
 #include <stdint.h>
 
 #include "linkedlist.h"
-static void
-seperator (void) {
+static void seperator (void) {
         printf("\n=============================\n");
 
 }
-static void
-print_chars (void *data) {
-        printf("%s\n", (char*) data);
+static void print_chars (void *data) {
+        printf("%s\n", VP_TO_CHAR(data));
 }
 
 
-static void
-print_ints(void *data) {
-        printf("%d\n", (intptr_t) data);
+static void print_ints(void *data) {
+        printf("%d\n", VP_TO_INT(data));
 }
 
-static void
-list_with_ints(void) {
-        LIST ints;
-
-        list_init(&ints, IntCmp);
+static void list_with_ints(void) {
+        LIST *ints = list_init(IntCmp);
 
         /* Put ints 0 to 10 into "LIST ints" */
         for (intptr_t i = 0; i <= 10; i++)
-                list_put(&ints, INT_TO_VP(i));
+                list_push_node(ints, INT_TO_VP(i));
 
         /* Print list forward and list lenght */
-        list_traverse(&ints, FORWARD, print_ints);
-        printf("\nLenght of \"ints\" %d\n", list_len(&ints));
+        list_traverse(ints, FORWARD, print_ints);
+        printf("\nLenght of \"ints\" %d\n", list_len(ints));
 
         /* Delete two nodes */
-        list_node_delete(&ints, INT_TO_VP(6));
-        list_node_delete(&ints, INT_TO_VP(5));
+        list_delete_node(ints, INT_TO_VP(6));
+        list_delete_node(ints, INT_TO_VP(5));
 
         seperator();
         printf("Remove node 5 and 6\n");
         /* Print list again forward and list lenght */
-        list_traverse(&ints, FORWARD, print_ints);
-        printf("\nLenght of \"ints\" %d\n", list_len(&ints));
+        list_traverse(ints, FORWARD, print_ints);
+        printf("\nLenght of \"ints\" %d\n", list_len(ints));
 
         /* Free list, and return to main */
-        list_dispose(&ints);
+        list_dispose(ints);
 }
 
-static void
-list_with_chars(void) {
-        LIST chars;
-        list_init(&chars, StrCmp);
+static void list_with_chars(void) {
+        LIST *chars = list_init(StrCmp);
 
-        list_put(&chars, "This");
-        list_put(&chars, "list");
-        list_put(&chars, "owns!");
-        list_put(&chars, ".. allmost!");
+        list_push_node(chars, "This");
+        list_push_node(chars, "list");
+        list_push_node(chars, "owns!");
+        list_push_node(chars, ".. allmost!");
 
-        list_node_delete(&chars, ".. allmost!"); /* hehe */
+        list_delete_node(chars, ".. allmost!");
 
-        list_traverse(&chars, FORWARD, print_chars);
-        printf("\nLenght of \"chars\"  %d\n", list_len(&chars));
-        list_dispose(&chars);
+        list_traverse(chars, FORWARD, print_chars);
+        printf("\nLenght of \"chars\"  %d\n", list_len(chars));
+        list_dispose(chars);
 }
 
-int
-main(void)
+int main(void)
 {
         list_with_ints();
         seperator();

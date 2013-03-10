@@ -23,7 +23,7 @@
 #include <stdbool.h>
 
 /**
- *   Traverse thru declared list
+ **   Traverse thru declared list
  **/
 
 #define FOREACH_NODE(current, list)                                         \
@@ -33,7 +33,7 @@
     for ((current) = (list)->tail; current; current = current->prev)
 
 /**
- *   Casts
+ **   Type Casts
  **/
 
 #define INT_TO_VP(i)   ((void*) ((intptr_t)(i)))
@@ -43,10 +43,10 @@
 #define VP_to_UINT(ui) ((unsigned) ((uintptr_t)(ui)))
 
 #define CHAR_TO_VP(c)  ((void*) ((char*)(c)))
-#define VP_TO_CHAR(c)  ((char) ((char*)(c)))
+#define VP_TO_CHAR(c)  ((char*) ((void*)(c)))
 
 /**
- *   Typedefs
+ **   Typedefs
  **/
 
 typedef struct NodeList NODE;
@@ -56,7 +56,7 @@ typedef int (*list_t)(void *);
 typedef enum { FORWARD, BACKWARD } Traverse_mode;
 
 /**
- *   Node and List struct
+ **   Node and List struct
  **/
 
 struct NodeList {
@@ -73,21 +73,21 @@ struct LinkedList {
 };
 
 /**
- *   Function Prototypes
+ **   Function Prototypes
  **/
 
 int IntCmp(const void *a, const void *b);
 int StrCmp(const void *a, const void *b);
 
-void list_init(LIST *, cmpfn_t cmpfn);
+LIST *list_init(cmpfn_t cmpfn);
 
-bool list_contains(LIST *, const void *data);
+bool list_contains(LIST *list, const void *data);
 
-NODE *list_find_node(LIST *, const void *data);
+NODE *list_find_node(LIST *list, const void *data);
 
-int list_node_delete(LIST *, const void *data);
+int list_delete_node(LIST *list, const void *data);
 
-void list_put(LIST *list, void *data);
+void list_push_node(LIST *list, void *data);
 
 unsigned list_len(LIST *list);
 
