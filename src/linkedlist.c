@@ -24,21 +24,21 @@
 
 #include "linkedlist.h"
 
-/*
-   Comapre Functions
-*/
+/**
+ *   Compare functions
+ **/
 
 int IntCmp(const void *a, const void *b) {
-        return (intptr_t)a - (intptr_t)b;
+        return VP_TO_INT(a) - VP_TO_INT(b);
 }
 
 int StrCmp(const void *a, const void *b) {
         return strcmp((char*)a, (char*)b);
 }
 
-/*
-   Init List - Head tail node, Compare Function and set n_elements to 0
-*/
+/**
+ *   Init List - Head tail node, Compare Function and set n_elements to 0
+ **/
 
 void
 list_init(LIST *list, cmpfn_t cmpfn) {
@@ -48,11 +48,14 @@ list_init(LIST *list, cmpfn_t cmpfn) {
 }
 
 /*
-   Push client data to node function
+   Put client data to new node
 */
 
 void
 list_put(LIST *list, void *data) {
+        if (!list)
+                return;
+
         NODE *new = (NODE *)calloc(1, sizeof(NODE));
 
         if (!new) {
@@ -102,7 +105,7 @@ list_dispose(LIST *list) {
         }
 }
 
-NODE *list_node(LIST *list, const void *data) {
+NODE *list_find_node(LIST *list, const void *data) {
         NODE *current;
         FOREACH_NODE(current, list) {
                 if ((list->cmpfn(data,current->data)) == 0) {
@@ -112,8 +115,8 @@ NODE *list_node(LIST *list, const void *data) {
         return NULL;
 }
 
-int list_find_delete(LIST *list, const void *data) {
-        NODE *target = list_node(list, data);
+int list_node_delete(LIST *list, const void *data) {
+        NODE *target = list_find_node(list, data);
 
         if (target == NULL)
                 return -1;

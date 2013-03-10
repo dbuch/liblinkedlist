@@ -53,8 +53,8 @@ list_with_ints(void) {
         printf("\nLenght of \"ints\" %d\n", list_len(&ints));
 
         /* Delete two nodes */
-        list_find_delete(&ints, INT_TO_VP(5));
-        list_find_delete(&ints, INT_TO_VP(6));
+        list_node_delete(&ints, INT_TO_VP(6));
+        list_node_delete(&ints, INT_TO_VP(5));
 
         seperator();
         printf("Remove node 5 and 6\n");
@@ -76,7 +76,7 @@ list_with_chars(void) {
         list_put(&chars, "owns!");
         list_put(&chars, ".. allmost!");
 
-        list_find_delete(&chars, ".. allmost!"); /* hehe */
+        list_node_delete(&chars, ".. allmost!"); /* hehe */
 
         list_traverse(&chars, FORWARD, print_chars);
         printf("\nLenght of \"chars\"  %d\n", list_len(&chars));
