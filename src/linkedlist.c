@@ -1,5 +1,5 @@
 /***
-  This file (linkedlist.c) is part of Liblinkedlist
+  This file (linkedlist) is part of Liblinkedlist
 
   Copyright 2013 Daniel Buch
 

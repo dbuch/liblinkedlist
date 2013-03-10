@@ -1,5 +1,5 @@
 /***
-  This file (main.c) is part of Liblinkedlist
+  This file (main) is part of Liblinkedlist
 
   Copyright 2013 Daniel Buch
 
@@ -57,6 +57,7 @@ list_with_ints(void) {
         list_find_delete(&ints, INT_TO_VP(6));
 
         seperator();
+        printf("Remove node 5 and 6\n");
         /* Print list again forward and list lenght */
         list_traverse(&ints, FORWARD, print_ints);
         printf("\nLenght of \"ints\" %d\n", list_len(&ints));
