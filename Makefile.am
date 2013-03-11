@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
-bin_PROGRAMS = liblinkedlist
+bin_PROGRAMS = example
 
-liblinkedlist_SOURCES = src/linkedlist.c src/linkedlist.h src/example.c
+example_SOURCES = src/linkedlist.c src/linkedlist.h src/example.c
 
 EXTRA_DIST = m4/NOTES
 dist_noinst_SCRIPTS = autogen.sh

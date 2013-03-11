@@ -40,7 +40,7 @@
 #define VP_TO_INT(i)   ((int) ((intptr_t)(i)))
 
 #define UINT_TO_VP(ui) ((void*) ((uintptr_t)(ui)))
-#define VP_to_UINT(ui) ((unsigned) ((uintptr_t)(ui)))
+#define VP_TO_UINT(ui) ((unsigned) ((uintptr_t)(ui)))
 
 #define CHAR_TO_VP(c)  ((void*) ((char*)(c)))
 #define VP_TO_CHAR(c)  ((char*) ((void*)(c)))
@@ -84,6 +84,10 @@ LIST *list_init(cmpfn_t cmpfn);
 bool list_contains(LIST *list, const void *data);
 
 NODE *list_find_node(LIST *list, const void *data);
+
+NODE *list_random_node(LIST *list);
+
+void list_qsort(LIST *list);
 
 int list_delete_node(LIST *list, const void *data);
 

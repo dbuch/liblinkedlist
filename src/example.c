@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <getopt.h>
+#include <assert.h>
 
 #include "linkedlist.h"
 static void seperator (void) {
@@ -27,19 +29,18 @@ static void seperator (void) {
 
 }
 static void print_chars (void *data) {
-        printf("%s\n", VP_TO_CHAR(data));
+        printf("%s ", VP_TO_CHAR(data));
 }
 
-
 static void print_ints(void *data) {
-        printf("%d\n", VP_TO_INT(data));
+        printf("%d ", VP_TO_INT(data));
 }
 
 static void list_with_ints(void) {
         LIST *ints = list_init(IntCmp);
 
         /* Put ints 0 to 10 into "LIST ints" */
-        for (intptr_t i = 0; i <= 10; i++)
+        for (int i = 0; i <= 10; i++)
                 list_push_node(ints, INT_TO_VP(i));
 
         /* Print list forward and list lenght */
@@ -49,6 +50,8 @@ static void list_with_ints(void) {
         /* Delete two nodes */
         list_delete_node(ints, INT_TO_VP(6));
         list_delete_node(ints, INT_TO_VP(5));
+
+        printf("Select random node and print data: %d\n", (list_random_node(ints))->data);
 
         seperator();
         printf("Remove node 5 and 6\n");
@@ -75,11 +78,52 @@ static void list_with_chars(void) {
         list_dispose(chars);
 }
 
-int main(void)
-{
+static int help(void) {
+
+        printf("[OPTIONS... {COMMAND ...\n\n"
+               "   -h --help            Show this help\n"
+               "   -v --version         Show package version\n");
+
+        return 0;
+}
+
+static int parse_argv(int argc, char *argv[]) {
+        static const struct option options[] = {
+                { "help",          no_argument,    NULL, 'h'       },
+                { "version",       no_argument,    NULL, 'v'       },
+                { NULL,            0,              NULL, 0         }
+        };
+        assert(argc >= 0);
+        assert(argv);
+
+        int c;
+        while ((c = getopt_long(argc, argv, "+hv", options, NULL)) >= 0) {
+                switch (c) {
+                        case 'h':
+                                help();
+                                return 0;
+                        case 'v':
+                                printf("this is beta version 0.01\n");
+                                return 0;
+                        default:
+                                return -1;
+                }
+        }
+        return 1;
+}
+
+int main(int argc, char *argv[]) {
+        int r = parse_argv(argc, argv);
+
+        if (r <= 0)
+                goto finish;
+
+
         list_with_ints();
         seperator();
         list_with_chars();
 
-        return 0;
+finish:
+
+        return r < 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 }

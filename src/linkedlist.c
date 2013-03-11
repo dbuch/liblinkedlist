@@ -21,12 +21,17 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <string.h>
+#include <time.h>
 
 #include "linkedlist.h"
 
 /**
  **   Compare functions
  **/
+
+int UIntCmp(const void *a, const void *b) {
+        return VP_TO_UINT(a) - VP_TO_UINT(b);
+}
 
 int IntCmp(const void *a, const void *b) {
         return VP_TO_INT(a) - VP_TO_INT(b);
@@ -187,4 +192,33 @@ void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
                                 typefn((void*) current->data);
                         break;
         }
+}
+
+/**
+ **   Returns random node from list
+ **/
+
+NODE *list_random_node(LIST *list) {
+        srand(time(NULL));
+        NODE *random = list->head;
+        unsigned n = rand() % list_len(list);
+
+        for (unsigned i = 0; i < n; i++) {
+                random = random->next;
+        }
+        return random;
+}
+
+/**
+ **   Quick-sort implementation for the linkedlist
+ **/
+
+void list_qsort(LIST *list) {
+        /* Select Random pivot */
+        NODE *pivot = list_random_node(list);
+        NODE *a = list->head;
+        NODE *b = NULL;
+
+        if (a == b || a->next == b)
+                return;
 }
