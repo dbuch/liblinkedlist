@@ -8,7 +8,6 @@ bin_PROGRAMS = example \
 
 noinst_LTLIBRARIES = liblinkedlist.la
 liblinkedlist_la_SOURCES = src/linkedlist.h src/linkedlist.c
-liblinkedlist_la_LDFLAGS = -version-info 0:0:1
 
 example_SOURCES = src/example.c
 example_LDADD = liblinkedlist.la

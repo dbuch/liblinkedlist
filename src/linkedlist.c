@@ -221,15 +221,12 @@ void list_sort(LIST *list) {
 
         /* Select Random pivot */
         NODE *pivot = list_random_node(list);
-        if (pivot == list->head || list->tail) /* Pivot cannot be head or tail */
-                pivot = list_random_node(list);
-
+        /*TODO pivot cannot be head, or build dummy node since i store data
+                in head and tail
+        */
 
         /* Devide list */
         NODE *left = pivot->prev;
         NODE *right = pivot->next;
         printf("Pivot: %d\n", pivot->data);
-        printf("left data: %d\n", VP_TO_INT(left->data));
-        printf("right data: %d\n", VP_TO_INT(right->data));
-
 }
