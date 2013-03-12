@@ -45,6 +45,16 @@
 #define CHAR_TO_VP(c)  ((void*) ((char*)(c)))
 #define VP_TO_CHAR(c)  ((char*) ((void*)(c)))
 
+#define CONST_CHAR_TO_VP(c)  ((void*) ((const char)(c)))
+#define VP_TO_CONST_CHAR(c)  ((const char) ((void*)(c)))
+
+/**
+ **   Swap NODE pointer macro for e.g. sorting algorithm
+ **/
+
+#define SWAP_NODE_P(a, b)                                           \
+        do { NODE *temp = (a); (a) = (b); (b) = temp; } while(false);
+
 /**
  **   Typedefs
  **/
@@ -87,7 +97,7 @@ NODE *list_find_node(LIST *list, const void *data);
 
 NODE *list_random_node(LIST *list);
 
-void list_qsort(LIST *list);
+void list_sort(LIST *list);
 
 int list_delete_node(LIST *list, const void *data);
 

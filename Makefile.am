@@ -1,7 +1,20 @@
-ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
-bin_PROGRAMS = example
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+AM_MAKEFLAGS = --no-print-directory
+AUTOMAKE_OPTIONS = color-tests parallel-tests
 
-example_SOURCES = src/linkedlist.c src/linkedlist.h src/example.c
+include_HEADERS = src/linkedlist.h
+bin_PROGRAMS = example \
+	       test
+
+noinst_LTLIBARIES += liblinkedlist.la
+liblinkedlist_SOURCES = src/linkedlist.h src/linkedlist.c
+liblinkedlist_LDFLAGS = -version-info 0:0:0
+
+example_SOURCES = src/example.c
+example_LDADD = liblinkedlist.la
+
+test_SOURCES = src/test/test.c
+test_LDADD = liblinkedlist.la
 
 EXTRA_DIST = m4/NOTES
 dist_noinst_SCRIPTS = autogen.sh

@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <getopt.h>
 #include <assert.h>
+#include <string.h>
 
 #include "linkedlist.h"
 static void seperator (void) {
@@ -46,12 +47,11 @@ static void list_with_ints(void) {
         /* Print list forward and list lenght */
         list_traverse(ints, FORWARD, print_ints);
         printf("\nLenght of \"ints\" %d\n", list_len(ints));
+        list_sort(ints);
 
         /* Delete two nodes */
         list_delete_node(ints, INT_TO_VP(6));
         list_delete_node(ints, INT_TO_VP(5));
-
-        printf("Select random node and print data: %d\n", (list_random_node(ints))->data);
 
         seperator();
         printf("Remove node 5 and 6\n");

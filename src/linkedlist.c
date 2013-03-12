@@ -213,12 +213,23 @@ NODE *list_random_node(LIST *list) {
  **   Quick-sort implementation for the linkedlist
  **/
 
-void list_qsort(LIST *list) {
+void list_sort(LIST *list) {
+
+        /* Return if list only holds 1 element */
+        if (list_len(list) <= 1)
+                return;
+
         /* Select Random pivot */
         NODE *pivot = list_random_node(list);
-        NODE *a = list->head;
-        NODE *b = NULL;
+        if (pivot == list->head || list->tail) /* Pivot cannot be head or tail */
+                pivot = list_random_node(list);
 
-        if (a == b || a->next == b)
-                return;
+
+        /* Devide list */
+        NODE *left = pivot->prev;
+        NODE *right = pivot->next;
+        printf("Pivot: %d\n", pivot->data);
+        printf("left data: %d\n", VP_TO_INT(left->data));
+        printf("right data: %d\n", VP_TO_INT(right->data));
+
 }
