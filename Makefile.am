@@ -6,9 +6,9 @@ include_HEADERS = src/linkedlist.h
 bin_PROGRAMS = example \
 	       test
 
-noinst_LTLIBARIES += liblinkedlist.la
-liblinkedlist_SOURCES = src/linkedlist.h src/linkedlist.c
-liblinkedlist_LDFLAGS = -version-info 0:0:0
+noinst_LTLIBRARIES = liblinkedlist.la
+liblinkedlist_la_SOURCES = src/linkedlist.h src/linkedlist.c
+liblinkedlist_la_LDFLAGS = -version-info 0:0:1
 
 example_SOURCES = src/example.c
 example_LDADD = liblinkedlist.la

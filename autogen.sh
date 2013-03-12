@@ -1,8 +1,8 @@
-#!/bin/sh -e
+#!/bin/sh
 
-test -n "$srcdir" || srcdir=.
+set -e
 
 echo '## Initializing build system'
-autoreconf -f -i --install --verbose "$srcdir"
-test -n "$NOCONFIGURE" || "$srcdir/configure" "$0"
+intltoolize --force --automake
+autoreconf --force --install --symlink
 echo '## Done. You can now ./configure build system'
