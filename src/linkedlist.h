@@ -21,6 +21,7 @@
 #define LINKEDLIST_H
 
 #include <stdbool.h>
+#include <inttypes.h>
 
 /**
  **   Traverse thru declared list
@@ -49,11 +50,19 @@
 #define VP_TO_CONST_CHAR(c)  ((const char) ((void*)(c)))
 
 /**
- **   Swap NODE pointer macro for e.g. sorting algorithm
+ **   Swap NODES helper-macro for e.g. sorting algorithm
  **/
 
-#define SWAP_NODE_P(a, b)                                           \
-        do { NODE *temp = (a); (a) = (b); (b) = temp; } while(false);
+#define SWAP_NODE_P(a, b)                                                   \
+        do { NODE *temp = (a); (a) = (b); (b) = temp; } while(0);
+
+/* TODO: THIS IS NOT CORRECT; nail this if its sane */
+#define SWAP_NODES(a, b)                                                    \
+        do                                                                  \
+        {       SWAP_NODE_P((a),(b))                                        \
+                SWAP_NODE_P((a)->prev, (b)->prev)                           \
+                SWAP_NODE_P((a)->next, (b)->next)                           \
+        } while(0);
 
 /**
  **   Typedefs
@@ -106,6 +115,8 @@ void list_push_node(LIST *list, void *data);
 unsigned list_len(LIST *list);
 
 void list_dispose(LIST *list);
+
+void list_dispose_data(LIST *list);
 
 void list_traverse(LIST *list, Traverse_mode, void (*typefn)(void*));
 

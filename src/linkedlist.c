@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "linkedlist.h"
+#include "debug.h"
 
 /**
  **   Compare functions
@@ -46,7 +47,11 @@ int StrCmp(const void *a, const void *b) {
  **/
 
 LIST *list_init(cmpfn_t cmpfn) {
-        LIST *newlist = (LIST*) malloc(sizeof(LIST));
+        LIST *newlist = (LIST*) calloc(1, sizeof(LIST));
+        if (!newlist) {
+                LOG("No memory for LIST");
+                exit(EXIT_FAILURE);
+        }
 
         newlist->head = newlist->tail = NULL;
         newlist->cmpfn = cmpfn;
@@ -65,7 +70,7 @@ void list_push_node(LIST *list, void *data) {
         NODE *new = (NODE *)calloc(1, sizeof(NODE));
 
         if (!new) {
-                fprintf(stderr, "ERROR: Not enough memory for a Note!\n");
+                LOG("Not enough memory for a Note!");
                 exit(EXIT_FAILURE);
         }
 
@@ -133,11 +138,8 @@ int list_delete_node(LIST *list, const void *data) {
         if (target == NULL)
                 return -1;
 
-        NODE *prev, *next;
-
-        prev = target->prev;
-        next = target->next;
-
+        NODE *prev = target->prev;
+        NODE *next = target->next;
 
         if (prev) {
                 if (next) {
@@ -221,12 +223,7 @@ void list_sort(LIST *list) {
 
         /* Select Random pivot */
         NODE *pivot = list_random_node(list);
-        /*TODO pivot cannot be head, or build dummy node since i store data
-                in head and tail
-        */
 
         /* Devide list */
-        NODE *left = pivot->prev;
-        NODE *right = pivot->next;
         printf("Pivot: %d\n", pivot->data);
 }

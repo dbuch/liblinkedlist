@@ -55,6 +55,7 @@ static void list_with_ints(void) {
 
         seperator();
         printf("Remove node 5 and 6\n");
+
         /* Print list again forward and list lenght */
         list_traverse(ints, FORWARD, print_ints);
         printf("\nLenght of \"ints\" %d\n", list_len(ints));
