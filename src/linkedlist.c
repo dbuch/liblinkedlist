@@ -224,6 +224,7 @@ void list_sort(LIST *list) {
         /* Select Random pivot */
         NODE *pivot = list_random_node(list);
 
+
         /* Devide list */
         printf("Pivot: %d\n", pivot->data);
 }

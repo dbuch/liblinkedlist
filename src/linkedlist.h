@@ -54,15 +54,11 @@
  **/
 
 #define SWAP_NODE_P(a, b)                                                   \
-        do { NODE *temp = (a); (a) = (b); (b) = temp; } while(0);
+        ( NODE *temp = (a); (a) = (b); (b) = temp; )
 
 /* TODO: THIS IS NOT CORRECT; nail this if its sane */
 #define SWAP_NODES(a, b)                                                    \
-        do                                                                  \
-        {       SWAP_NODE_P((a),(b))                                        \
-                SWAP_NODE_P((a)->prev, (b)->prev)                           \
-                SWAP_NODE_P((a)->next, (b)->next)                           \
-        } while(0);
+        ( SWAP_NODE_P((a), (b))
 
 /**
  **   Typedefs
@@ -71,7 +67,6 @@
 typedef struct NodeList NODE;
 typedef struct LinkedList LIST;
 typedef int (*cmpfn_t)(const void *, const void *);
-typedef int (*list_t)(void *);
 typedef enum { FORWARD, BACKWARD } Traverse_mode;
 
 /**
@@ -87,7 +82,6 @@ struct LinkedList {
         NODE *head, *tail;
 
         cmpfn_t cmpfn;
-        list_t list_t;
         unsigned n_elements;
 };
 
