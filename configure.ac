@@ -20,7 +20,6 @@ LT_INIT([disable-static])
 # i18n stuff for the PolicyKit policy files
 IT_PROG_INTLTOOL([0.40.0])
 
-
 AC_PROG_MKDIR_P
 AC_PROG_LN_S
 AC_PROG_SED

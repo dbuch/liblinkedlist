@@ -13,7 +13,7 @@ liblinkedlist_la_LDFLAGS = -module -avoid-version -shared
 example_SOURCES = src/example.c
 example_LDADD = liblinkedlist.la
 
-test_SOURCES = src/test/test.c
+test_SOURCES = src/tests/test-liblinkedlist.c
 test_LDADD = liblinkedlist.la
 
 EXTRA_DIST = m4/NOTES

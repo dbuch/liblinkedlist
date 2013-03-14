@@ -49,7 +49,7 @@ int StrCmp(const void *a, const void *b) {
 LIST *list_init(cmpfn_t cmpfn) {
         LIST *newlist = (LIST*) calloc(1, sizeof(LIST));
         if (!newlist) {
-                LOG("No memory for LIST");
+                LOG("Not enough memory for new List");
                 exit(EXIT_FAILURE);
         }
 
@@ -70,7 +70,7 @@ void list_push_node(LIST *list, void *data) {
         NODE *new = (NODE *)calloc(1, sizeof(NODE));
 
         if (!new) {
-                LOG("Not enough memory for a Note!");
+                LOG("Not enough memory for a Note");
                 exit(EXIT_FAILURE);
         }
 
@@ -92,8 +92,10 @@ void list_push_node(LIST *list, void *data) {
  **/
 
 unsigned list_len(LIST *list) {
-        if (!list)
+        if (!list) {
+                INFO("Invalid list");
                 return 0;
+        }
 
         return list->n_elements;
 }
@@ -103,8 +105,11 @@ unsigned list_len(LIST *list) {
  **/
 
 void list_dispose(LIST *list) {
-        if(!list)
+        if (!list) {
+                INFO("invalid list");
                 return;
+        }
+
 
         NODE *current, *next;
         for (current = list->head; current; current = next) {
@@ -119,6 +124,10 @@ void list_dispose(LIST *list) {
  **/
 
 NODE *list_find_node(LIST *list, const void *data) {
+        if (!list) {
+                INFO("invalid list");
+                return NULL;
+        }
         NODE *current;
         FOREACH_NODE(current, list) {
                 if ((list->cmpfn(data,current->data)) == 0) {
@@ -133,10 +142,17 @@ NODE *list_find_node(LIST *list, const void *data) {
  **/
 
 int list_delete_node(LIST *list, const void *data) {
+        if (!list) {
+                INFO("invalid list");
+                return -1;
+        }
+
         NODE *target = list_find_node(list, data);
 
-        if (target == NULL)
+        if (!target) {
+                INFO("Target node not found");
                 return -1;
+        }
 
         NODE *prev = target->prev;
         NODE *next = target->next;
@@ -161,7 +177,7 @@ int list_delete_node(LIST *list, const void *data) {
 
         free(target);
         list->n_elements--;
-        return 1;
+        return 0;
 }
 
 /**
@@ -169,6 +185,10 @@ int list_delete_node(LIST *list, const void *data) {
  **/
 
 bool list_contains(LIST *list, const void *data) {
+        if (!list) {
+                INFO("Invalid list");
+                return false;
+        }
         NODE *current;
         FOREACH_NODE(current, list) {
                 if ((list->cmpfn(data,current->data)) == 0) {
@@ -183,6 +203,10 @@ bool list_contains(LIST *list, const void *data) {
  **/
 
 void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
+        if (!list) {
+                INFO("Invalid list");
+                return;
+        }
         NODE *current;
         switch (mode) {
                 case FORWARD:
@@ -201,6 +225,10 @@ void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
  **/
 
 NODE *list_random_node(LIST *list) {
+        if (!list) {
+                INFO("Invalid list");
+                return NULL;
+        }
         srand(time(NULL));
         NODE *random = list->head;
         unsigned n = rand() % list_len(list);
@@ -216,7 +244,10 @@ NODE *list_random_node(LIST *list) {
  **/
 
 void list_sort(LIST *list) {
-
+        if (!list) {
+                INFO("Invalid list");
+                return;
+        }
         /* Return if list only holds 1 element */
         if (list_len(list) <= 1)
                 return;
