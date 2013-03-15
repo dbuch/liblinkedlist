@@ -53,13 +53,8 @@
  **   Swap NODES helper-macro for e.g. sorting algorithm
  **/
 
-#define SWAP_NODE_P(a, b)                                                   \
-        ( NODE *temp = (a); (a) = (b); (b) = temp; )
-
-/* TODO: THIS IS NOT CORRECT; nail this if its sane */
-#define SWAP_NODES(a, b)                                                    \
-        ( SWAP_NODE_P((a), (b))
-
+#define SWAP(a, b)                                                    \
+        ({ __typeof__ (a) temp = (a); (a) = (b); (b) = temp; })
 /**
  **   Typedefs
  **/
@@ -74,7 +69,7 @@ typedef enum { FORWARD, BACKWARD } Traverse_mode;
  **/
 
 struct NodeList {
-        const void *data;
+        void *data;
         NODE *prev, *next;
 };
 
@@ -96,15 +91,15 @@ LIST *list_init(cmpfn_t cmpfn);
 
 bool list_contains(LIST *list, const void *data);
 
-NODE *list_find_node(LIST *list, const void *data);
+NODE *list_get(LIST *list, const void *data);
 
-NODE *list_random_node(LIST *list);
+NODE *list_get_random(LIST *list);
 
-void list_sort(LIST *list);
+void list_sort_data(LIST *list);
 
 int list_delete_node(LIST *list, const void *data);
 
-void list_push_node(LIST *list, void *data);
+void list_put(LIST *list, void *data);
 
 unsigned list_len(LIST *list);
 

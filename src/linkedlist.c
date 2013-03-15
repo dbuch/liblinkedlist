@@ -63,7 +63,7 @@ LIST *list_init(cmpfn_t cmpfn) {
  **   Puts new node + client data to list
  **/
 
-void list_push_node(LIST *list, void *data) {
+void list_put(LIST *list, void *data) {
         if (!list)
                 return;
 
@@ -100,6 +100,21 @@ unsigned list_len(LIST *list) {
         return list->n_elements;
 }
 
+void list_dispose_data(LIST *list) {
+        if (!list) {
+                INFO("invalid list");
+                return;
+        }
+
+        NODE *current, *next;
+
+        for (current = list->head; current; current = next) {
+                next = current->next;
+                free(current->data);
+                free(current);
+        }
+        free(list);
+}
 /**
  **   list_dispose free's the list nodes
  **/
@@ -123,7 +138,7 @@ void list_dispose(LIST *list) {
  **   Traverse list and returns node equal to client data
  **/
 
-NODE *list_find_node(LIST *list, const void *data) {
+NODE *list_get(LIST *list, const void *data) {
         if (!list) {
                 INFO("invalid list");
                 return NULL;
@@ -147,7 +162,7 @@ int list_delete_node(LIST *list, const void *data) {
                 return -1;
         }
 
-        NODE *target = list_find_node(list, data);
+        NODE *target = list_get(list, data);
 
         if (!target) {
                 INFO("Target node not found");
@@ -224,7 +239,7 @@ void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
  **   Returns random node from list
  **/
 
-NODE *list_random_node(LIST *list) {
+NODE *list_get_random(LIST *list) {
         if (!list) {
                 INFO("Invalid list");
                 return NULL;
@@ -240,10 +255,10 @@ NODE *list_random_node(LIST *list) {
 }
 
 /**
- **   Quick-sort implementation for the linkedlist
+ **   Bubble-sort implementation for the linkedlist data
  **/
 
-void list_sort(LIST *list) {
+void list_sort_data(LIST *list) {
         if (!list) {
                 INFO("Invalid list");
                 return;
@@ -252,10 +267,16 @@ void list_sort(LIST *list) {
         if (list_len(list) <= 1)
                 return;
 
-        /* Select Random pivot */
-        NODE *pivot = list_random_node(list);
+        NODE *i;
+        NODE *j;
 
+        FOREACH_NODE_REVERSE(i, list) {
+                FOREACH_NODE(j, list) {
+                        if (j->next != NULL) {
+                                if (list->cmpfn(j->data, j->next->data) > 0)
+                                        SWAP(j->data, j->next->data);
+                        }
+                }
+        }
 
-        /* Devide list */
-        printf("Pivot: %d\n", pivot->data);
 }

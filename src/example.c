@@ -23,6 +23,7 @@
 #include <getopt.h>
 #include <assert.h>
 #include <string.h>
+#include <time.h>
 
 #include "linkedlist.h"
 static void seperator (void) {
@@ -40,24 +41,19 @@ static void print_ints(void *data) {
 static void list_with_ints(void) {
         LIST *ints = list_init(IntCmp);
 
-        /* Put ints 0 to 10 into "LIST ints" */
+        /* Put 10 random ints into "LIST ints" */
+        printf("Push 10 random int elements to list\n");
+        srand(time(NULL));
         for (int i = 0; i <= 10; i++)
-                list_push_node(ints, INT_TO_VP(i));
+                list_put(ints, INT_TO_VP(rand() % 300));
 
-        /* Print list forward and list lenght */
         list_traverse(ints, FORWARD, print_ints);
-        printf("\nLenght of \"ints\" %d\n", list_len(ints));
-        list_sort(ints);
-
-        /* Delete two nodes */
-        list_delete_node(ints, INT_TO_VP(6));
-        list_delete_node(ints, INT_TO_VP(5));
-
         seperator();
-        printf("Remove node 5 and 6\n");
+        printf("Sorting data..\n");
+        list_sort_data(ints);
+        list_traverse(ints, FORWARD, print_ints);
 
         /* Print list again forward and list lenght */
-        list_traverse(ints, FORWARD, print_ints);
         printf("\nLenght of \"ints\" %d\n", list_len(ints));
 
         /* Free list, and return to main */
@@ -67,16 +63,32 @@ static void list_with_ints(void) {
 static void list_with_chars(void) {
         LIST *chars = list_init(StrCmp);
 
-        list_push_node(chars, "This");
-        list_push_node(chars, "list");
-        list_push_node(chars, "owns!");
-        list_push_node(chars, ".. allmost!");
+        const char *string[] = { "This", "List", "owns!", ".. allmost!", NULL };
+
+        for (const char **l = string ; l && *l; l++) {
+                list_put(chars, (void*) *l);
+        }
 
         list_delete_node(chars, ".. allmost!");
 
         list_traverse(chars, FORWARD, print_chars);
         printf("\nLenght of \"chars\"  %d\n", list_len(chars));
         list_dispose(chars);
+}
+
+static void list_with_strdup(void) {
+        LIST *chars = list_init(StrCmp);
+
+        char *string_one = strdup("Hello");
+        char *string_two = strdup("World");
+
+        list_put(chars, CHAR_TO_VP(string_one));
+        list_put(chars, CHAR_TO_VP(string_two));
+
+        list_traverse(chars, FORWARD, print_chars);
+        printf("\n");
+
+        list_dispose_data(chars);
 }
 
 static int help(void) {
@@ -123,6 +135,8 @@ int main(int argc, char *argv[]) {
         list_with_ints();
         seperator();
         list_with_chars();
+        seperator();
+        list_with_strdup();
 
 finish:
 
