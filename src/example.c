@@ -42,19 +42,21 @@ static void list_with_ints(void) {
         LIST *ints = list_init(IntCmp);
 
         /* Put 10 random ints into "LIST ints" */
-        printf("Push 10 random int elements to list\n");
-        srand(time(NULL));
-        for (int i = 0; i <= 10; i++)
+        printf("Put 10 random int elements to list\n");
+        for (int i = 0; i < 10; i++) {
                 list_put(ints, INT_TO_VP(rand() % 300));
+        }
 
         list_traverse(ints, FORWARD, print_ints);
         seperator();
         printf("Sorting data..\n");
-        list_sort_data(ints);
+        list_qsort(ints);
         list_traverse(ints, FORWARD, print_ints);
 
         /* Print list again forward and list lenght */
         printf("\nLenght of \"ints\" %d\n", list_len(ints));
+
+        printf("%d\n", (list_get_median(ints))->data);
 
         /* Free list, and return to main */
         list_dispose(ints);
@@ -66,7 +68,7 @@ static void list_with_chars(void) {
         const char *string[] = { "This", "List", "owns!", ".. allmost!", NULL };
 
         for (const char **l = string ; l && *l; l++) {
-                list_put(chars, (void*) *l);
+                list_put(chars, CONST_CHAR_TO_VP(*l));
         }
 
         list_delete_node(chars, ".. allmost!");
@@ -80,7 +82,7 @@ static void list_with_strdup(void) {
         LIST *chars = list_init(StrCmp);
 
         char *string_one = strdup("Hello");
-        char *string_two = strdup("World");
+        char *string_two = strdup("World!");
 
         list_put(chars, CHAR_TO_VP(string_one));
         list_put(chars, CHAR_TO_VP(string_two));
@@ -88,7 +90,7 @@ static void list_with_strdup(void) {
         list_traverse(chars, FORWARD, print_chars);
         printf("\n");
 
-        list_dispose_data(chars);
+        list_dispose_clear(chars);
 }
 
 static int help(void) {
@@ -126,6 +128,7 @@ static int parse_argv(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+        srand(time(NULL));
         int r = parse_argv(argc, argv);
 
         if (r <= 0)

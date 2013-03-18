@@ -46,15 +46,16 @@
 #define CHAR_TO_VP(c)  ((void*) ((char*)(c)))
 #define VP_TO_CHAR(c)  ((char*) ((void*)(c)))
 
-#define CONST_CHAR_TO_VP(c)  ((void*) ((const char)(c)))
-#define VP_TO_CONST_CHAR(c)  ((const char) ((void*)(c)))
+#define CONST_CHAR_TO_VP(c)  ((void*) ((const char*)(c)))
+#define VP_TO_CONST_CHAR(c)  ((const char*) ((void*)(c)))
 
 /**
  **   Swap NODES helper-macro for e.g. sorting algorithm
  **/
 
 #define SWAP(a, b)                                                    \
-        ({ __typeof__ (a) temp = (a); (a) = (b); (b) = temp; })
+        do { __typeof__ (a) temp = (a); (a) = (b); (b) = temp; } while(0);
+
 /**
  **   Typedefs
  **/
@@ -84,29 +85,19 @@ struct LinkedList {
  **   Function Prototypes
  **/
 
-int IntCmp(const void *a, const void *b);
-int StrCmp(const void *a, const void *b);
-
-LIST *list_init(cmpfn_t cmpfn);
-
-bool list_contains(LIST *list, const void *data);
-
-NODE *list_get(LIST *list, const void *data);
-
-NODE *list_get_random(LIST *list);
-
-void list_sort_data(LIST *list);
-
-int list_delete_node(LIST *list, const void *data);
-
-void list_put(LIST *list, void *data);
-
-unsigned list_len(LIST *list);
-
-void list_dispose(LIST *list);
-
-void list_dispose_data(LIST *list);
-
-void list_traverse(LIST *list, Traverse_mode, void (*typefn)(void*));
+extern int IntCmp(const void *a, const void *b);
+extern int StrCmp(const void *a, const void *b);
+extern LIST *list_init(cmpfn_t cmpfn);
+extern bool list_contains(LIST *list, const void *data);
+extern void list_put(LIST *list, void *data);
+extern NODE *list_get(LIST *list, const void *data);
+extern NODE *list_get_random(LIST *list);
+extern NODE *list_get_median(LIST *list);
+extern void list_qsort(LIST *list);
+extern int list_delete_node(LIST *list, const void *data);
+extern unsigned list_len(LIST *list);
+extern void list_dispose(LIST *list);
+extern void list_dispose_clear(LIST *list);
+extern void list_traverse(LIST *list, Traverse_mode, void (*typefn)(void*));
 
 #endif /* end of include guard: LINKEDLIST_H */

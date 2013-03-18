@@ -100,9 +100,9 @@ unsigned list_len(LIST *list) {
         return list->n_elements;
 }
 
-void list_dispose_data(LIST *list) {
+void list_dispose_clear(LIST *list) {
         if (!list) {
-                INFO("invalid list");
+                INFO("Invalid list");
                 return;
         }
 
@@ -255,28 +255,42 @@ NODE *list_get_random(LIST *list) {
 }
 
 /**
- **   Bubble-sort implementation for the linkedlist data
+ **   Returns median node from list
  **/
 
-void list_sort_data(LIST *list) {
+NODE *list_get_median(LIST *list) {
+        if (!list) {
+                INFO("Invalid list");
+                return NULL;
+        }
+        NODE *median = list->head;
+        unsigned n = list_len(list) / 2;
+
+        for (unsigned i = 0; i < n; i++) {
+                median = median->next;
+        }
+        return median;
+}
+
+/**
+ **   Quick-sort implementation for the linkedlist data
+ **/
+
+void list_qsort(LIST *list) {
         if (!list) {
                 INFO("Invalid list");
                 return;
         }
-        /* Return if list only holds 1 element */
-        if (list_len(list) <= 1)
-                return;
+        NODE *pivot = list_get_median(list);
+        NODE *less = pivot->prev, *greater = pivot->next;
 
-        NODE *i;
-        NODE *j;
-
-        FOREACH_NODE_REVERSE(i, list) {
-                FOREACH_NODE(j, list) {
-                        if (j->next != NULL) {
-                                if (list->cmpfn(j->data, j->next->data) > 0)
-                                        SWAP(j->data, j->next->data);
-                        }
-                }
+        while (less) {
+                printf("less\n");
+                less = less->prev;
+        }
+        while (greater) {
+                printf("greater\n");
+                greater = greater->next;
         }
 
 }

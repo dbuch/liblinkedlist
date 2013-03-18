@@ -31,12 +31,6 @@ AC_PROG_CC_C99
 AM_PROG_CC_C_O
 AC_PROG_GCC_TRADITIONAL
 
-AC_SUBST([dbusinterfacedir], [$with_dbusinterfacedir])
-AC_SUBST([bashcompletiondir], [$with_bashcompletiondir])
-AC_SUBST([pamlibdir], [$with_pamlibdir])
-AC_SUBST([rootprefix], [$with_rootprefix])
-AC_SUBST([rootlibdir], [$with_rootlibdir])
-
 AC_CONFIG_FILES([Makefile po/Makefile.in])
 
 AC_OUTPUT
