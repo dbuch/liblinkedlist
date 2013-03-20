@@ -49,6 +49,7 @@ static void list_with_ints(void) {
 
         list_traverse(ints, FORWARD, print_ints);
         seperator();
+        printf("Median of list %d\n", (list_get_median(ints))->data);
         printf("Sorting data..\n");
         list_qsort(ints);
         list_traverse(ints, FORWARD, print_ints);
@@ -56,7 +57,6 @@ static void list_with_ints(void) {
         /* Print list again forward and list lenght */
         printf("\nLenght of \"ints\" %d\n", list_len(ints));
 
-        printf("%d\n", (list_get_median(ints))->data);
 
         /* Free list, and return to main */
         list_dispose(ints);

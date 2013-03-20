@@ -77,9 +77,9 @@ void list_put(LIST *list, void *data) {
         new->data = data; /* Transfer Client data to new node */
 
         if (list->tail) {
-                list->tail->next = new; /* Put newly allocated node to tails next */
-                new->prev = list->tail; /* Make new previous pointer point to List last */
-                list->tail = new;       /* finally point new to list last */
+                list->tail->next = new; /* Tail next points to new node */
+                new->prev = list->tail; /* New Node's previous points to tail */
+                list->tail = new;       /* Tail points to new node */
         } else {                        /** In case list is empty, head and tail is now points to new node **/
                 list->head = new;
                 list->tail = new;
@@ -255,7 +255,7 @@ NODE *list_get_random(LIST *list) {
 }
 
 /**
- **   Returns median node from list
+ **   Returns median node from list (If list length is odd round down)
  **/
 
 NODE *list_get_median(LIST *list) {
@@ -264,16 +264,22 @@ NODE *list_get_median(LIST *list) {
                 return NULL;
         }
         NODE *median = list->head;
-        unsigned n = list_len(list) / 2;
+        unsigned n = list_len(list);
+
+        if (n % 2 == 1)
+                n = n / 2 - 1;
+        else
+                n = n / 2;
 
         for (unsigned i = 0; i < n; i++) {
                 median = median->next;
         }
+
         return median;
 }
 
 /**
- **   Quick-sort implementation for the linkedlist data
+ **   Quick-sort NON-recursive implementation for the linkedlist data
  **/
 
 void list_qsort(LIST *list) {
@@ -281,16 +287,19 @@ void list_qsort(LIST *list) {
                 INFO("Invalid list");
                 return;
         }
+        LIST less, greater;
+        LIST *lessPtr = &less;
+        LIST *greaterPtr = &greater;
+
         NODE *pivot = list_get_median(list);
-        NODE *less = pivot->prev, *greater = pivot->next;
 
-        while (less) {
-                printf("less\n");
-                less = less->prev;
-        }
-        while (greater) {
-                printf("greater\n");
-                greater = greater->next;
+        lessPtr->tail = pivot->prev;
+        greaterPtr->head = pivot->next;
+
+        NODE *current;
+        FOREACH_NODE_REVERSE(current, lessPtr) {
         }
 
+        FOREACH_NODE(current, greaterPtr) {
+        }
 }
