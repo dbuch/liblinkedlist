@@ -57,6 +57,13 @@
         do { __typeof__ (a) temp = (a); (a) = (b); (b) = temp; } while(0);
 
 /**
+ **   macros for malloc and calloc
+ **/
+
+#define new(t, n) ((t*) malloc((n) * sizeof(t)))
+#define new0(t, n) ((t*) calloc((n), sizeof(t)))
+
+/**
  **   Typedefs
  **/
 

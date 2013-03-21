@@ -22,6 +22,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <time.h>
+#include <assert.h>
 
 #include "linkedlist.h"
 #include "debug.h"
@@ -47,11 +48,10 @@ int StrCmp(const void *a, const void *b) {
  **/
 
 LIST *list_init(cmpfn_t cmpfn) {
-        LIST *newlist = (LIST*) calloc(1, sizeof(LIST));
-        if (!newlist) {
-                LOG("Not enough memory for new List");
-                exit(EXIT_FAILURE);
-        }
+        assert(cmpfn);
+
+        LIST *newlist = new(LIST, 1);
+        assert(newlist);
 
         newlist->head = newlist->tail = NULL;
         newlist->cmpfn = cmpfn;
@@ -64,15 +64,10 @@ LIST *list_init(cmpfn_t cmpfn) {
  **/
 
 void list_put(LIST *list, void *data) {
-        if (!list)
-                return;
+        assert(list);
 
-        NODE *new = (NODE *)calloc(1, sizeof(NODE));
-
-        if (!new) {
-                LOG("Not enough memory for a Note");
-                exit(EXIT_FAILURE);
-        }
+        NODE *new = new0(NODE, 1);
+        assert(new);
 
         new->data = data; /* Transfer Client data to new node */
 
@@ -92,19 +87,13 @@ void list_put(LIST *list, void *data) {
  **/
 
 unsigned list_len(LIST *list) {
-        if (!list) {
-                INFO("Invalid list");
-                return 0;
-        }
+        assert(list);
 
         return list->n_elements;
 }
 
 void list_dispose_clear(LIST *list) {
-        if (!list) {
-                INFO("Invalid list");
-                return;
-        }
+        assert(list);
 
         NODE *current, *next;
 
@@ -120,11 +109,7 @@ void list_dispose_clear(LIST *list) {
  **/
 
 void list_dispose(LIST *list) {
-        if (!list) {
-                INFO("invalid list");
-                return;
-        }
-
+        assert(list);
 
         NODE *current, *next;
         for (current = list->head; current; current = next) {
@@ -139,10 +124,8 @@ void list_dispose(LIST *list) {
  **/
 
 NODE *list_get(LIST *list, const void *data) {
-        if (!list) {
-                INFO("invalid list");
-                return NULL;
-        }
+        assert(list);
+
         NODE *current;
         FOREACH_NODE(current, list) {
                 if ((list->cmpfn(data,current->data)) == 0) {
@@ -157,10 +140,7 @@ NODE *list_get(LIST *list, const void *data) {
  **/
 
 int list_delete_node(LIST *list, const void *data) {
-        if (!list) {
-                INFO("invalid list");
-                return -1;
-        }
+        assert(list);
 
         NODE *target = list_get(list, data);
 
@@ -200,10 +180,8 @@ int list_delete_node(LIST *list, const void *data) {
  **/
 
 bool list_contains(LIST *list, const void *data) {
-        if (!list) {
-                INFO("Invalid list");
-                return false;
-        }
+        assert(list);
+
         NODE *current;
         FOREACH_NODE(current, list) {
                 if ((list->cmpfn(data,current->data)) == 0) {
@@ -218,10 +196,8 @@ bool list_contains(LIST *list, const void *data) {
  **/
 
 void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
-        if (!list) {
-                INFO("Invalid list");
-                return;
-        }
+        assert(list);
+
         NODE *current;
         switch (mode) {
                 case FORWARD:
@@ -240,11 +216,8 @@ void list_traverse(LIST *list, Traverse_mode mode, void (*typefn)(void*)) {
  **/
 
 NODE *list_get_random(LIST *list) {
-        if (!list) {
-                INFO("Invalid list");
-                return NULL;
-        }
-        srand(time(NULL));
+        assert(list);
+
         NODE *random = list->head;
         unsigned n = rand() % list_len(list);
 
@@ -279,14 +252,12 @@ NODE *list_get_median(LIST *list) {
 }
 
 /**
- **   Quick-sort NON-recursive implementation for the linkedlist data
+ **   Quick-sort NON-recursive implementation for the list data
  **/
 
 void list_qsort(LIST *list) {
-        if (!list) {
-                INFO("Invalid list");
-                return;
-        }
+        assert(list);
+
         LIST less, greater;
         LIST *lessPtr = &less;
         LIST *greaterPtr = &greater;
